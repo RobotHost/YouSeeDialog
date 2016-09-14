@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <solid android:color="@color/error_lower_ys_d" />
+            <corners android:radius="@dimen/dialog_border_radius_ys_d" />
+        </shape>
+
+    </item>
+
+    <item
+        android:bottom="@dimen/dialog_border_width_ys_d"
+        android:left="@dimen/dialog_border_width_ys_d"
+        android:right="@dimen/dialog_border_width_ys_d"
+        android:top="@dimen/dialog_border_width_ys_d">
+
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <solid android:color="@color/simple_lower_ys_d" />
+            <padding
+                android:bottom="@dimen/dialog_content_padding_ys_d"
+                android:left="@dimen/dialog_content_padding_ys_d"
+                android:right="@dimen/dialog_content_padding_ys_d"
+                android:top="@dimen/dialog_content_padding_ys_d" />
+            <corners android:radius="@dimen/dialog_border_radius_ys_d" />
+        </shape>
+
+    </item>
+
+
+</layer-list>

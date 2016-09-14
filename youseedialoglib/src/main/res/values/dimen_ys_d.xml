@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <dimen name="dialog_border_radius_ys_d" >7dp</dimen>
+    <dimen name="btn_border_radius_ys_d" >5dp</dimen>
+    <dimen name="dialog_border_width_ys_d" >0.6dp</dimen>
+    <dimen name="dialog_content_padding_ys_d" >14dp</dimen>
+    <dimen name="dialog_width_ys_d" >286dp</dimen>
+
+
+    <dimen name="dialog_inner_item_padding_01_ys_d" >12dp</dimen>
+
+    <dimen name="text_size_01_ys_d" >14sp</dimen>
+    <dimen name="text_size_02_ys_d" >18sp</dimen>
+
+    <dimen name="btn_height_01_ys_d" >32dp</dimen>
+    <dimen name="btn_padding_01_ys_d" >20dp</dimen>
+</resources>
