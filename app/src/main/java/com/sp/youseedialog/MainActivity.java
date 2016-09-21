@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import com.orhanobut.logger.Logger;
 import com.sp.youseedialoglib.YouSeeDialog;
+import com.sp.youseedialoglib.YouSeeDialogListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,12 +48,14 @@ public class MainActivity extends AppCompatActivity {
         test_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new YouSeeDialog(activity, 1, "1")
+                new YouSeeDialog(activity)
                         .setTitleText("重要提醒")
                         .setContentText("重要提醒111111")
                         .setCancelBtnText("canncel")
                         .setConfirmBtnText("ok!")
-                        .setYouSeeDialogListener(new YouSeeDialog.YouSeeDialogListener() {
+                        .setDialogStyle(YouSeeDialog.D_SIMPLE_BUTTON_TYPE)
+                        .setBtnDialogColor(YouSeeDialog.C_MATCHING_ERROR_TYPE)
+                        .setYouSeeDialogListener(new YouSeeDialogListener() {
                             @Override
                             public void onCancelClick(YouSeeDialog youSeeDialog) {
                                 youSeeDialog.cancel();

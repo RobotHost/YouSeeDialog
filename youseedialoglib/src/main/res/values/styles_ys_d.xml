@@ -14,7 +14,7 @@
 
     
     <style name="button_base_ys_d" parent="android:Widget.Button">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">@dimen/btn_width_01_ys_d</item>
         <item name="android:layout_height">@dimen/btn_height_01_ys_d</item>
         <item name="android:background">@drawable/btn_bg_simple_ys_d</item>
         <item name="android:textSize">@dimen/text_size_01_ys_d</item>

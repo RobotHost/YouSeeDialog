@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -30,19 +29,21 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
     public static final String C_MATCHING_WARN_TYPE = "1";
     public static final String C_MATCHING_ERROR_TYPE = "2";
     //TODO 配色自定 如不是以上缺省值，则使用用户传递的色值进行处理(准备这样做)
-
-    private boolean isTnterrupterBack = false;
-
+    private int mDialogStyle = D_SIMPLE_BUTTON_TYPE;
+    private String mColorMatchType = C_MATCHING_SIMPLE_TYPE;
 
     private AnimationSet mDialogInAnim = null;
     private AnimationSet mDialogOutAnim = null;
 
     private View dialog_view = null;
+    private LinearLayout dialog_content_ll = null;
     private LinearLayout simple_view_ll = null;
+    private LinearLayout progress_view_ll = null;
     private TextView title_tv = null;
     private TextView content_tv = null;
     private Button cancel_btn = null;
     private Button confirm_btn = null;
+    private View btn_center_view = null;
 
     private YouSeeDialogListener mYouSeeDialogListener = null;
     private boolean mIsCancel = false;
@@ -56,7 +57,7 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
     private boolean mCancelBtnVisible = false;
     private boolean mConfirmBtnVisible = false;
 
-    public YouSeeDialog(Context context, int styleType, String colorMatchingType) {
+    public YouSeeDialog(Context context) {
         super(context, R.style.theme_base_style_ys_d);
         setCancelable(true);
         setCanceledOnTouchOutside(false);
@@ -70,19 +71,12 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                Log.i("see-dialog", "onAnimationEnd:"+"dialog_view:"+dialog_view+";mIsCancel:"+mIsCancel);
-                dialog_view.setVisibility(View.GONE);
-                dialog_view.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.i("see-dialog", "dialog_view.post");
-                        if (mIsCancel) {
-                            YouSeeDialog.super.cancel();
-                        } else {
-                            YouSeeDialog.super.dismiss();
-                        }
-                    }
-                });
+                dialog_content_ll.setVisibility(View.GONE);
+                if (mIsCancel) {
+                    YouSeeDialog.super.cancel();
+                } else {
+                    YouSeeDialog.super.dismiss();
+                }
             }
 
             @Override
@@ -93,6 +87,15 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
 
     }
 
+    @Override
+    public void setCancelable(boolean flag) {
+        super.setCancelable(flag);
+    }
+
+    @Override
+    public void setCanceledOnTouchOutside(boolean flag) {
+        super.setCanceledOnTouchOutside(flag);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,14 +103,18 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
         Log.i("see-dialog", "onCreate");
         setContentView(R.layout.you_see_dialog);
         dialog_view = getWindow().getDecorView().findViewById(android.R.id.content);
+        dialog_content_ll = (LinearLayout) findViewById(R.id.dialog_content_ll);
         simple_view_ll = (LinearLayout) findViewById(R.id.simple_view_ll);
+        progress_view_ll = (LinearLayout) findViewById(R.id.progress_view_ll);
         title_tv = (TextView) findViewById(R.id.title_tv);
         content_tv = (TextView) findViewById(R.id.content_tv);
         cancel_btn = (Button) findViewById(R.id.cancel_btn);
         confirm_btn = (Button) findViewById(R.id.confirm_btn);
+        btn_center_view = findViewById(R.id.btn_center_view);
         cancel_btn.setOnClickListener(this);
         confirm_btn.setOnClickListener(this);
-
+        setDialogStyle(mDialogStyle);
+        setBtnDialogColor(mColorMatchType);
         setTitleText(mTitleText);
         setTitleVisibility(mTitleVisible);
         setContentText(mContentText);
@@ -129,14 +136,60 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
 
     @Override
     public void cancel() {
-        //动画完成再super
+        //动画完成的回调中super
         outAnimationStart(true);
     }
 
     @Override
     public void dismiss() {
-        //动画完成再super
+        //动画完成的回调中super
         outAnimationStart(false);
+    }
+
+    public YouSeeDialog setBtnDialogColor(String colorMatchType) {
+        if (!TextUtils.isEmpty(colorMatchType)) {
+            mColorMatchType = colorMatchType;
+            if (dialog_content_ll != null && confirm_btn != null) {
+                if (mColorMatchType.equals(C_MATCHING_SIMPLE_TYPE)) {
+                    dialog_content_ll.setBackgroundResource(R.drawable.dialog_bg_simple);
+                    confirm_btn.setBackgroundResource(R.drawable.btn_bg_simple_ys_d);
+                } else if (mColorMatchType.equals(C_MATCHING_WARN_TYPE)) {
+                    dialog_content_ll.setBackgroundResource(R.drawable.dialog_bg_warn);
+                    confirm_btn.setBackgroundResource(R.drawable.btn_bg_warn_ys_d);
+                } else if (mColorMatchType.equals(C_MATCHING_ERROR_TYPE)) {
+                    dialog_content_ll.setBackgroundResource(R.drawable.dialog_bg_error);
+                    confirm_btn.setBackgroundResource(R.drawable.btn_bg_error_ys_d);
+                } else {
+                    diyColorMatch();
+                }
+            }
+        }
+        return this;
+    }
+
+
+    private void diyColorMatch(){
+        if(!TextUtils.isEmpty(mColorMatchType) && mColorMatchType.startsWith("#")){
+
+
+
+
+
+        }
+    }
+
+    public YouSeeDialog setDialogStyle(int dialogStyle) {
+        mDialogStyle = dialogStyle;
+        if (simple_view_ll != null && progress_view_ll != null) {
+            if (mDialogStyle == D_SIMPLE_BUTTON_TYPE) {
+                simple_view_ll.setVisibility(View.VISIBLE);
+                progress_view_ll.setVisibility(View.GONE);
+            } else if (mDialogStyle == D_PROGRESS_WHEEL_TYPE) {
+                progress_view_ll.setVisibility(View.VISIBLE);
+                simple_view_ll.setVisibility(View.GONE);
+            }
+        }
+        return this;
     }
 
     private void outAnimationStart(boolean isCancel) {
@@ -198,6 +251,7 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
             if (mConfirmBtnVisible) {
                 confirm_btn.setVisibility(View.VISIBLE);
             } else {
+                btn_center_view.setVisibility(View.GONE);
                 confirm_btn.setVisibility(View.GONE);
             }
         }
@@ -222,6 +276,7 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
             if (mCancelBtnVisible) {
                 cancel_btn.setVisibility(View.VISIBLE);
             } else {
+                btn_center_view.setVisibility(View.GONE);
                 cancel_btn.setVisibility(View.GONE);
             }
         }
@@ -269,17 +324,12 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             cancel();
-            return  false;
-        }else{
+            return false;
+        } else {
             return super.onKeyDown(keyCode, event);
         }
     }
 
-    public interface YouSeeDialogListener {
-        public void onCancelClick(YouSeeDialog youSeeDialog);
-
-        public void onConfirmClick(YouSeeDialog youSeeDialog);
-    }
 }
