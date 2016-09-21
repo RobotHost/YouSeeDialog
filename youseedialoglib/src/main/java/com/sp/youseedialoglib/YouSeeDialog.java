@@ -2,7 +2,14 @@ package com.sp.youseedialoglib;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Bundle;
+import android.support.v4.graphics.ColorUtils;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -160,22 +167,103 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
                     dialog_content_ll.setBackgroundResource(R.drawable.dialog_bg_error);
                     confirm_btn.setBackgroundResource(R.drawable.btn_bg_error_ys_d);
                 } else {
-                    diyColorMatch();
+                    LayerDrawable layerDrawableDialog = diyColorMatchDialog(mColorMatchType);
+                    LayerDrawable layerDrawableBtn = diyColorMatchBtn(mColorMatchType);
+                    if(layerDrawableDialog != null){
+                        dialog_content_ll.setBackgroundDrawable(layerDrawableDialog);
+                    }
+                    if(layerDrawableBtn != null){
+                        confirm_btn.setBackgroundDrawable(layerDrawableBtn);
+                    }
                 }
             }
         }
         return this;
     }
 
+    /**
+     *
+     * @param colourValue 色值，如#F79347
+     */
+    private LayerDrawable diyColorMatchDialog(String colourValue){
+        if(!TextUtils.isEmpty(mColorMatchType) && mColorMatchType.startsWith("#")){
+            int baseColor = Integer.valueOf(colourValue.replace("#","0x").toLowerCase());
 
-    private void diyColorMatch(){
+
+
+            int radius0 = 10;
+            float[] outerR = new float[] { radius0, radius0, radius0, radius0, radius0, radius0, radius0, radius0 };
+            RoundRectShape roundRectShape0 = new RoundRectShape(outerR, null, null);
+
+            int radius1 = 10;
+            float[] outerR1 = new float[] { radius1, radius1, radius1, radius1, radius1, radius1, radius1, radius1 };
+            RoundRectShape roundRectShape1 = new RoundRectShape(outerR1, null, null);
+
+            ShapeDrawable shapeDrawableBg = new ShapeDrawable();
+
+            shapeDrawableBg.setPadding(0, 0, 0, 0);
+            shapeDrawableBg.setShape(roundRectShape0);
+
+            shapeDrawableBg.getPaint().setStyle(Paint.Style.FILL);
+            shapeDrawableBg.getPaint().setColor(0xffbbbbbb);
+
+
+            ShapeDrawable shapeDrawableFg = new ShapeDrawable();
+
+            shapeDrawableFg.setPadding(23, 23, 23, 23);
+            shapeDrawableFg.setShape(roundRectShape1);
+
+            shapeDrawableFg.getPaint().setStyle(Paint.Style.FILL);
+            shapeDrawableFg.getPaint().setColor(0xffdddddd);
+
+            Drawable[] layers = {shapeDrawableBg, shapeDrawableFg};
+            LayerDrawable layerDrawable = new LayerDrawable(layers);
+            layerDrawable.setLayerInset(1, 0, 0, 1, 1);
+
+            return layerDrawable;
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param colourValue 色值，如#F79347
+     */
+    private LayerDrawable diyColorMatchBtn(String colourValue){
         if(!TextUtils.isEmpty(mColorMatchType) && mColorMatchType.startsWith("#")){
 
+            int radius0 = 10;
+            float[] outerR = new float[] { radius0, radius0, radius0, radius0, radius0, radius0, radius0, radius0 };
+            RoundRectShape roundRectShape0 = new RoundRectShape(outerR, null, null);
+
+            int radius1 = 10;
+            float[] outerR1 = new float[] { radius1, radius1, radius1, radius1, radius1, radius1, radius1, radius1 };
+            RoundRectShape roundRectShape1 = new RoundRectShape(outerR1, null, null);
+
+            ShapeDrawable shapeDrawableBg = new ShapeDrawable();
+
+            shapeDrawableBg.setPadding(0, 0, 0, 0);
+            shapeDrawableBg.setShape(roundRectShape0);
+
+            shapeDrawableBg.getPaint().setStyle(Paint.Style.FILL);
+            shapeDrawableBg.getPaint().setColor(0xffbbbbbb);
 
 
+            ShapeDrawable shapeDrawableFg = new ShapeDrawable();
 
+            shapeDrawableFg.setPadding(23, 23, 23, 23);
+            shapeDrawableFg.setShape(roundRectShape1);
 
+            shapeDrawableFg.getPaint().setStyle(Paint.Style.FILL);
+            shapeDrawableFg.getPaint().setColor(0xffdddddd);
+
+            Drawable[] layers = {shapeDrawableBg, shapeDrawableFg};
+            LayerDrawable layerDrawable = new LayerDrawable(layers);
+            layerDrawable.setLayerInset(1, 0, 0, 1, 1);
+
+            return layerDrawable;
         }
+        return null;
     }
 
     public YouSeeDialog setDialogStyle(int dialogStyle) {
