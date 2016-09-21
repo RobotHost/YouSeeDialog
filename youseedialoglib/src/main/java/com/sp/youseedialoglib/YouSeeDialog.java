@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -68,10 +70,12 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
 
             @Override
             public void onAnimationEnd(Animation animation) {
+                Log.i("see-dialog", "onAnimationEnd:"+"dialog_view:"+dialog_view+";mIsCancel:"+mIsCancel);
                 dialog_view.setVisibility(View.GONE);
                 dialog_view.post(new Runnable() {
                     @Override
                     public void run() {
+                        Log.i("see-dialog", "dialog_view.post");
                         if (mIsCancel) {
                             YouSeeDialog.super.cancel();
                         } else {
@@ -93,14 +97,16 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dialog_view = LayoutInflater.from(getContext()).inflate(R.layout.you_see_dialog, null);
-        setContentView(dialog_view);
-        simple_view_ll = (LinearLayout) dialog_view.findViewById(R.id.simple_view_ll);
-        title_tv = (TextView) dialog_view.findViewById(R.id.title_tv);
-        content_tv = (TextView) dialog_view.findViewById(R.id.content_tv);
-        cancel_btn = (Button) dialog_view.findViewById(R.id.cancel_btn);
-        confirm_btn = (Button) dialog_view.findViewById(R.id.confirm_btn);
-
+        Log.i("see-dialog", "onCreate");
+        setContentView(R.layout.you_see_dialog);
+        dialog_view = getWindow().getDecorView().findViewById(android.R.id.content);
+        simple_view_ll = (LinearLayout) findViewById(R.id.simple_view_ll);
+        title_tv = (TextView) findViewById(R.id.title_tv);
+        content_tv = (TextView) findViewById(R.id.content_tv);
+        cancel_btn = (Button) findViewById(R.id.cancel_btn);
+        confirm_btn = (Button) findViewById(R.id.confirm_btn);
+        cancel_btn.setOnClickListener(this);
+        confirm_btn.setOnClickListener(this);
 
         setTitleText(mTitleText);
         setTitleVisibility(mTitleVisible);
@@ -116,6 +122,7 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
     @Override
     protected void onStart() {
         super.onStart();
+        Log.i("see-dialog", "onStart");
         dialog_view.startAnimation(mDialogInAnim);
 
     }
@@ -140,7 +147,7 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
     public YouSeeDialog setTitleVisibility(boolean visible) {
         mTitleVisible = visible;
         if (title_tv != null) {
-            if (visible) {
+            if (mTitleVisible) {
                 title_tv.setVisibility(View.VISIBLE);
             } else {
                 title_tv.setVisibility(View.GONE);
@@ -151,9 +158,11 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
 
     public YouSeeDialog setTitleText(String str) {
         mTitleText = str;
-        if (title_tv != null && !TextUtils.isEmpty(str)) {
-            title_tv.setText(str);
+        if (!TextUtils.isEmpty(mTitleText)) {
             setTitleVisibility(true);
+            if (title_tv != null) {
+                title_tv.setText(mTitleText);
+            }
         }
         return this;
     }
@@ -161,7 +170,7 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
     public YouSeeDialog setContentVisibility(boolean visible) {
         mContentVisible = visible;
         if (content_tv != null) {
-            if (visible) {
+            if (mContentVisible) {
                 content_tv.setVisibility(View.VISIBLE);
             } else {
                 content_tv.setVisibility(View.GONE);
@@ -173,9 +182,11 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
 
     public YouSeeDialog setContentText(String str) {
         mContentText = str;
-        if (content_tv != null && !TextUtils.isEmpty(str)) {
-            content_tv.setText(str);
+        if (!TextUtils.isEmpty(mContentText)) {
             setContentVisibility(true);
+            if (content_tv != null) {
+                content_tv.setText(mContentText);
+            }
         }
         return this;
     }
@@ -184,7 +195,7 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
     public YouSeeDialog setConfirmBtnVisibility(boolean visible) {
         mConfirmBtnVisible = visible;
         if (confirm_btn != null) {
-            if (visible) {
+            if (mConfirmBtnVisible) {
                 confirm_btn.setVisibility(View.VISIBLE);
             } else {
                 confirm_btn.setVisibility(View.GONE);
@@ -195,9 +206,12 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
 
     public YouSeeDialog setConfirmBtnText(String str) {
         mConfirmBtnText = str;
-        if (confirm_btn != null && !TextUtils.isEmpty(str)) {
-            confirm_btn.setText(str);
+        if (!TextUtils.isEmpty(mConfirmBtnText)) {
             setConfirmBtnVisibility(true);
+            if (confirm_btn != null) {
+                confirm_btn.setText(mConfirmBtnText);
+            }
+
         }
         return this;
     }
@@ -205,7 +219,7 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
     public YouSeeDialog setCancelBtnVisibility(boolean visible) {
         mCancelBtnVisible = visible;
         if (cancel_btn != null) {
-            if (visible) {
+            if (mCancelBtnVisible) {
                 cancel_btn.setVisibility(View.VISIBLE);
             } else {
                 cancel_btn.setVisibility(View.GONE);
@@ -216,9 +230,12 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
 
     public YouSeeDialog setCancelBtnText(String str) {
         mCancelBtnText = str;
-        if (cancel_btn != null && !TextUtils.isEmpty(str)) {
-            cancel_btn.setText(str);
+        if (!TextUtils.isEmpty(mCancelBtnText)) {
             setCancelBtnVisibility(true);
+            if (cancel_btn != null) {
+                cancel_btn.setText(mCancelBtnText);
+            }
+
         }
         return this;
     }
@@ -250,6 +267,15 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
 
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            cancel();
+            return  false;
+        }else{
+            return super.onKeyDown(keyCode, event);
+        }
+    }
 
     public interface YouSeeDialogListener {
         public void onCancelClick(YouSeeDialog youSeeDialog);

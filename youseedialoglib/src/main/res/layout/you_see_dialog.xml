@@ -20,6 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_02_ys_d"
+            android:visibility="visible"
             android:textColor="@color/text_color_title_ys_d"
             android:layout_marginTop="@dimen/dialog_inner_item_padding_01_ys_d"
             android:singleLine="true" />
@@ -30,6 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_01_ys_d"
+            android:visibility="visible"
             android:textAlignment="center"
             android:gravity="center"
             android:textColor="@color/text_color_content_ys_d" />
@@ -51,6 +53,7 @@
             <Button
                 android:id="@+id/confirm_btn"
                 style="@style/button_base_ys_d"
+                android:visibility="visible"
                 android:text="@string/confirm_ys_d" />
         </LinearLayout>
 

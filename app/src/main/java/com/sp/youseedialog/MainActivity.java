@@ -27,39 +27,43 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void doBusiness() {
-        DisplayMetrics displayMetrics = activity.getResources().getDisplayMetrics();
-
-        int widthPX = displayMetrics.widthPixels;
-        int heightPX = displayMetrics.heightPixels;
-        float densityF = displayMetrics.density;
-        int densityDpi = displayMetrics.densityDpi;
-
-        float widthDpi = displayMetrics.xdpi;
-        float heightDpi = displayMetrics.ydpi;
-
-        Logger.d(new StringBuffer().append("widthPX=").append(widthPX).append(";").append("heightPX=")
-                .append(heightPX).append(";").append("densityF=").append(densityF).append(";").append("densityDpi=")
-                .append(densityDpi).append(";").append("widthDpi=").append(widthDpi).append(";").append("heightDpi=")
-                .append(heightDpi));
+//        DisplayMetrics displayMetrics = activity.getResources().getDisplayMetrics();
+//
+//        int widthPX = displayMetrics.widthPixels;
+//        int heightPX = displayMetrics.heightPixels;
+//        float densityF = displayMetrics.density;
+//        int densityDpi = displayMetrics.densityDpi;
+//
+//        float widthDpi = displayMetrics.xdpi;
+//        float heightDpi = displayMetrics.ydpi;
+//
+//        Logger.d(new StringBuffer().append("widthPX=").append(widthPX).append(";").append("heightPX=")
+//                .append(heightPX).append(";").append("densityF=").append(densityF).append(";").append("densityDpi=")
+//                .append(densityDpi).append(";").append("widthDpi=").append(widthDpi).append(";").append("heightDpi=")
+//                .append(heightDpi));
 
         test_btn = (Button) this.findViewById(R.id.test_btn);
 
         test_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new YouSeeDialog(activity, 1, "1").setTitleText("重要提醒").setCancelBtnText("canncel").setConfirmBtnText("ok!").setYouSeeDialogListener(new YouSeeDialog.YouSeeDialogListener() {
-                    @Override
-                    public void onCancelClick(YouSeeDialog youSeeDialog) {
+                new YouSeeDialog(activity, 1, "1")
+                        .setTitleText("重要提醒")
+                        .setContentText("重要提醒111111")
+                        .setCancelBtnText("canncel")
+                        .setConfirmBtnText("ok!")
+                        .setYouSeeDialogListener(new YouSeeDialog.YouSeeDialogListener() {
+                            @Override
+                            public void onCancelClick(YouSeeDialog youSeeDialog) {
+                                youSeeDialog.cancel();
+                            }
 
-                        youSeeDialog.cancel();
-                    }
-
-                    @Override
-                    public void onConfirmClick(YouSeeDialog youSeeDialog) {
-
-                        youSeeDialog.dismiss();
-                    }
-                }).show();
+                            @Override
+                            public void onConfirmClick(YouSeeDialog youSeeDialog) {
+                                youSeeDialog.dismiss();
+                            }
+                        })
+                        .show();
 
             }
         });

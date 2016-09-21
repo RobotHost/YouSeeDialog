@@ -9,7 +9,7 @@
         <item name="android:windowBackground">@color/transparent_ys_d</item>
         <item name="android:windowAnimationStyle">@null</item>
         <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.4</item>
+        <item name="android:backgroundDimAmount">0.5</item>
     </style>
 
     
