@@ -184,8 +184,6 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
      */
     private LayerDrawable diyColorMatchDialog(String colourValue) {
         if (!TextUtils.isEmpty(mColorMatchType) && mColorMatchType.startsWith("#")) {
-//            int contentColor = Integer.valueOf("#FFFFFF".replace("#", "0x").toLowerCase());
-//            int baseColor = Integer.valueOf(colourValue.replace("#", "0x").toLowerCase());
             int contentColor = Color.parseColor("#FFFFFF");
             int baseColor = Color.parseColor(colourValue);
 
@@ -221,7 +219,6 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
      */
     private StateListDrawable diyColorMatchBtn(String colourValue) {
         if (!TextUtils.isEmpty(mColorMatchType) && mColorMatchType.startsWith("#")) {
-//            int baseColor = Integer.valueOf(colourValue.replace("#", "0x").toLowerCase());
             int baseColor = Color.parseColor(colourValue);
             int redBase = Color.red(baseColor);
             int greenBase = Color.green(baseColor);
