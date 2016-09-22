@@ -3,8 +3,8 @@
     
     <dimen name="dialog_border_radius_ys_d" >7dp</dimen>
     <dimen name="btn_border_radius_ys_d" >5dp</dimen>
-    <dimen name="dialog_border_width_ys_d" >0.6dp</dimen>
-    <dimen name="dialog_content_padding_ys_d" >14dp</dimen>
+    <dimen name="dialog_border_width_ys_d" >1dp</dimen>
+    <dimen name="dialog_content_padding_ys_d" >12dp</dimen>
     <dimen name="dialog_width_ys_d" >286dp</dimen>
 
 

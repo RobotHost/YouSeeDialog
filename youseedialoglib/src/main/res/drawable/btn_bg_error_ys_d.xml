@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
-        <shape android:shape="rectangle">
-            <solid android:color="@color/error_lower_ys_d" />
-            <corners android:radius="@dimen/btn_border_radius_ys_d" />
-
-        </shape>
-
-    </item>
-
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <solid android:color="@color/error_ys_d" />
             <corners android:radius="@dimen/btn_border_radius_ys_d" />
         </shape>
-
     </item>
+
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/error_lower_ys_d" />
+            <corners android:radius="@dimen/btn_border_radius_ys_d" />
+        </shape>
+    </item>
+
+
 </selector>
