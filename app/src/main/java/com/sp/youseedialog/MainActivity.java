@@ -3,12 +3,9 @@ package com.sp.youseedialog;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 
-import com.orhanobut.logger.Logger;
-import com.sp.youseedialoglib.YouSeeDialog;
 import com.sp.youseedialoglib.YouSeeDialogListener;
 
 public class MainActivity extends AppCompatActivity {
@@ -54,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                         .setCancelBtnText("canncel")
                         .setConfirmBtnText("ok!")
                         .setDialogStyle(YouSeeDialog.D_SIMPLE_BUTTON_TYPE)
-                        .setBtnDialogColor(YouSeeDialog.C_MATCHING_ERROR_TYPE)
+                        .setBtnDialogColor("#FFF79347")
                         .setYouSeeDialogListener(new YouSeeDialogListener() {
                             @Override
                             public void onCancelClick(YouSeeDialog youSeeDialog) {
