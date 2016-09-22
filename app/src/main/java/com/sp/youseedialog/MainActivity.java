@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                         .setYouSeeDialogListener(new YouSeeDialogListener() {
                             @Override
                             public void onCancelClick(YouSeeDialog youSeeDialog) {
-                                youSeeDialog.cancel();
+                                youSeeDialog.dismiss();
                             }
 
                             @Override
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                         .setYouSeeDialogListener(new YouSeeDialogListener() {
                             @Override
                             public void onCancelClick(YouSeeDialog youSeeDialog) {
-                                youSeeDialog.cancel();
+                                youSeeDialog.dismiss();
                             }
 
                             @Override
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                         .setYouSeeDialogListener(new YouSeeDialogListener() {
                             @Override
                             public void onCancelClick(YouSeeDialog youSeeDialog) {
-                                youSeeDialog.cancel();
+                                youSeeDialog.dismiss();
                             }
 
                             @Override
