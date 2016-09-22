@@ -95,14 +95,14 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
 
     }
 
-    @Override
-    public void setCancelable(boolean flag) {
-        super.setCancelable(flag);
+    public YouSeeDialog setDialogCancelable(boolean flag) {
+        YouSeeDialog.super.setCancelable(flag);
+        return this;
     }
 
-    @Override
-    public void setCanceledOnTouchOutside(boolean flag) {
-        super.setCanceledOnTouchOutside(flag);
+    public YouSeeDialog setDialogCanceledOnTouchOutside(boolean flag) {
+        YouSeeDialog.super.setCanceledOnTouchOutside(flag);
+        return this;
     }
 
     @Override

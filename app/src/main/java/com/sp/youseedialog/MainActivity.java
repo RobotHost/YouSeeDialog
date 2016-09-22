@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                         .setConfirmBtnText("ok!")
                         .setDialogStyle(YouSeeDialog.D_SIMPLE_BUTTON_TYPE)
                         .setBtnDialogColor("#4A4AFF")
+                        .setDialogCanceledOnTouchOutside(true)
                         .setYouSeeDialogListener(new YouSeeDialogListener() {
                             @Override
                             public void onCancelClick(YouSeeDialog youSeeDialog) {
