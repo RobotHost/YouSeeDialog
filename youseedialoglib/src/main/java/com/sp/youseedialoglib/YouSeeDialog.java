@@ -10,10 +10,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -24,9 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by songyuan on 2016/9/9.
@@ -118,7 +112,6 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i("see-dialog", "onCreate");
         setContentView(R.layout.you_see_dialog);
         dialog_view = getWindow().getDecorView().findViewById(android.R.id.content);
         dialog_content_ll = (LinearLayout) findViewById(R.id.dialog_content_ll);
@@ -148,7 +141,6 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i("see-dialog", "onStart");
         dialog_view.startAnimation(mDialogInAnim);
 //        if (mDialogStyle == D_PROGRESS_WHEEL_TYPE) {
 //            startProgressColorTimer();
@@ -304,7 +296,7 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
 
             Drawable[] layers = {shapeDrawableBg, shapeDrawableFg};
             LayerDrawable layerDrawable = new LayerDrawable(layers);
-            layerDrawable.setLayerInset(DIALOG_LINE, DIALOG_LINE, DIALOG_LINE, DIALOG_LINE, DIALOG_LINE);
+            layerDrawable.setLayerInset(1, DIALOG_LINE, DIALOG_LINE, DIALOG_LINE, DIALOG_LINE);
 
             return layerDrawable;
         }
@@ -320,7 +312,6 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
             int redBase = Color.red(baseColor);
             int greenBase = Color.green(baseColor);
             int blueBase = Color.blue(baseColor);
-            Log.i("see-dialog", "redBase=" + redBase + ";greenBase=" + greenBase + ";blueBase=" + blueBase);
             int redDeep = redBase;
             int greenDeep = greenBase;
             int blueDeep = blueBase;
@@ -334,7 +325,6 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
                 blueDeep = blueDeep - 35;
             }
             int deepColor = Color.rgb(redDeep, greenDeep, blueDeep);
-            Log.i("see-dialog", "redDeep=" + redDeep + ";greenDeep=" + greenDeep + ";blueDeep=" + blueDeep);
 
             float radius0 = 10f;
             float[] outerR = new float[]{radius0, radius0, radius0, radius0, radius0, radius0, radius0, radius0};
