@@ -64,11 +64,13 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
     private boolean mContentVisible = false;
     private boolean mCancelBtnVisible = false;
     private boolean mConfirmBtnVisible = false;
-//    private Timer timer = null;
+    //    private Timer timer = null;
 //    private TimerTask timerTask = null;
 //    private static final int CHANGE_COUNT_MIN = 1;
 //    private static final int CHANGE_COUNT_MAX = 5;
 //    private int changeCount = CHANGE_COUNT_MIN;
+    private static int DIALOG_PADDING;//px
+    private static int DIALOG_LINE;//px
 
     public YouSeeDialog(Context context) {
         super(context, R.style.theme_base_style_ys_d);
@@ -97,6 +99,9 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
 
             }
         });
+
+        DIALOG_PADDING = dip2Px(context, 12);
+        DIALOG_LINE = dip2Px(context, 1);
 
     }
 
@@ -292,14 +297,14 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
             float[] outerR1 = new float[]{radius1, radius1, radius1, radius1, radius1, radius1, radius1, radius1};
             RoundRectShape roundRectShape1 = new RoundRectShape(outerR1, null, null);
             ShapeDrawable shapeDrawableFg = new ShapeDrawable();
-            shapeDrawableFg.setPadding(12, 12, 12, 12);
+            shapeDrawableFg.setPadding(DIALOG_PADDING, DIALOG_PADDING, DIALOG_PADDING, DIALOG_PADDING);
             shapeDrawableFg.setShape(roundRectShape1);
             shapeDrawableFg.getPaint().setStyle(Paint.Style.FILL);
             shapeDrawableFg.getPaint().setColor(contentColor);
 
             Drawable[] layers = {shapeDrawableBg, shapeDrawableFg};
             LayerDrawable layerDrawable = new LayerDrawable(layers);
-            layerDrawable.setLayerInset(1, 1, 1, 1, 1);
+            layerDrawable.setLayerInset(DIALOG_LINE, DIALOG_LINE, DIALOG_LINE, DIALOG_LINE, DIALOG_LINE);
 
             return layerDrawable;
         }
@@ -519,4 +524,10 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
 //            timer = null;
 //        }
 //    }
+
+
+    private int dip2Px(Context context, float dip) {
+        float density = context.getResources().getDisplayMetrics().density;
+        return (int) (dip * density + 0.5f);
+    }
 }
