@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/dialog_width_ys_d"
     android:id="@+id/dialog_content_ll"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:background="@drawable/dialog_bg_simple"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="12dp"
-    android:background="@drawable/dialog_bg_simple">
+    android:padding="12dp">
 
     <LinearLayout
         android:id="@+id/simple_view_ll"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/dialog_width_ys_d"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_size_02_ys_d"
-            android:textColor="@color/text_color_title_ys_d"
             android:layout_marginTop="@dimen/dialog_inner_item_padding_01_ys_d"
-            android:singleLine="true" />
+            android:maxLines="1"
+            android:textColor="@color/text_title_ys_d"
+            android:textSize="@dimen/text_size_02_ys_d" />
 
         <TextView
             android:id="@+id/content_tv"
-            android:layout_marginTop="@dimen/dialog_inner_item_padding_01_ys_d"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_size_01_ys_d"
-            android:textAlignment="center"
+            android:layout_marginTop="@dimen/dialog_inner_item_padding_01_ys_d"
             android:gravity="center"
-            android:textColor="@color/text_color_content_ys_d" />
+            android:textAlignment="center"
+            android:textColor="@color/text_content_ys_d"
+            android:textSize="@dimen/text_size_01_ys_d" />
 
         <LinearLayout
-            android:layout_marginTop="@dimen/dialog_inner_item_padding_01_ys_d"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dialog_inner_item_padding_01_ys_d"
             android:gravity="center">
 
             <Button
@@ -47,10 +47,13 @@
                 style="@style/button_base_ys_d"
                 android:background="@drawable/btn_bg_cancel_ys_d"
                 android:text="@string/cancel_ys_d" />
+
             <View
+
                 android:id="@+id/btn_center_view"
                 android:layout_width="@dimen/dialog_inner_item_padding_01_ys_d"
-                android:layout_height="1dp"/>
+                android:layout_height="1dp" />
+
             <Button
                 android:id="@+id/confirm_btn"
                 style="@style/button_base_ys_d"
@@ -61,11 +64,18 @@
 
     <LinearLayout
         android:id="@+id/progress_view_ll"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <com.gc.materialdesign.views.ProgressBarCircularIndeterminate
+            android:id="@+id/circular_progress"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:background="#F28B8E" />
+
     </LinearLayout>
 
 </LinearLayout>

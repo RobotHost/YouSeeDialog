@@ -12,6 +12,9 @@
         <item name="android:backgroundDimAmount">0.5</item>
     </style>
 
+    <style name="theme_act_orientation_ys_d" parent="android:Theme.Dialog">
+        <item name="android:configChanges">screenSize|orientation|keyboardHidden</item>
+    </style>
     
     <style name="button_base_ys_d" parent="android:Widget.Button">
         <item name="android:layout_width">@dimen/btn_width_01_ys_d</item>

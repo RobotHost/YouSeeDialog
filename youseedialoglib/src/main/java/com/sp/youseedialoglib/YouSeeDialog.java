@@ -10,7 +10,8 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Bundle;
-import android.support.v4.graphics.ColorUtils;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -22,40 +23,39 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * Created by songyuan on 2016/9/9.
  */
 public class YouSeeDialog extends Dialog implements View.OnClickListener {
-
-
-    //样式
+    //样式缺省
     public static final int D_PROGRESS_WHEEL_TYPE = 0;
     public static final int D_SIMPLE_BUTTON_TYPE = 1;
-
+    private int mDialogStyle = D_SIMPLE_BUTTON_TYPE;
     //配色缺省
     public static final String C_MATCHING_SIMPLE_TYPE = "0";
     public static final String C_MATCHING_WARN_TYPE = "1";
     public static final String C_MATCHING_ERROR_TYPE = "2";
-    //TODO 配色自定 如不是以上缺省值，则使用用户传递的色值进行处理(准备这样做)
-    private int mDialogStyle = D_SIMPLE_BUTTON_TYPE;
     private String mColorMatchType = C_MATCHING_SIMPLE_TYPE;
-
+    private String mProgressCircleColor = null;
     private AnimationSet mDialogInAnim = null;
     private AnimationSet mDialogOutAnim = null;
-
     private View dialog_view = null;
     private LinearLayout dialog_content_ll = null;
     private LinearLayout simple_view_ll = null;
     private LinearLayout progress_view_ll = null;
+    private ProgressBarCircularIndeterminate circular_progress = null;
     private TextView title_tv = null;
     private TextView content_tv = null;
     private Button cancel_btn = null;
     private Button confirm_btn = null;
     private View btn_center_view = null;
-
     private YouSeeDialogListener mYouSeeDialogListener = null;
     private boolean mIsCancel = false;
-
     private String mTitleText = null;
     private String mContentText = null;
     private String mCancelBtnText = null;
@@ -64,6 +64,11 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
     private boolean mContentVisible = false;
     private boolean mCancelBtnVisible = false;
     private boolean mConfirmBtnVisible = false;
+//    private Timer timer = null;
+//    private TimerTask timerTask = null;
+//    private static final int CHANGE_COUNT_MIN = 1;
+//    private static final int CHANGE_COUNT_MAX = 5;
+//    private int changeCount = CHANGE_COUNT_MIN;
 
     public YouSeeDialog(Context context) {
         super(context, R.style.theme_base_style_ys_d);
@@ -119,10 +124,12 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
         cancel_btn = (Button) findViewById(R.id.cancel_btn);
         confirm_btn = (Button) findViewById(R.id.confirm_btn);
         btn_center_view = findViewById(R.id.btn_center_view);
+        circular_progress = (ProgressBarCircularIndeterminate) findViewById(R.id.circular_progress);
         cancel_btn.setOnClickListener(this);
         confirm_btn.setOnClickListener(this);
         setDialogStyle(mDialogStyle);
         setBtnDialogColor(mColorMatchType);
+        setProgressDialogColor(mProgressCircleColor);
         setTitleText(mTitleText);
         setTitleVisibility(mTitleVisible);
         setContentText(mContentText);
@@ -131,7 +138,6 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
         setCancelBtnVisibility(mCancelBtnVisible);
         setConfirmBtnText(mConfirmBtnText);
         setConfirmBtnVisibility(mConfirmBtnVisible);
-
     }
 
     @Override
@@ -139,11 +145,17 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
         super.onStart();
         Log.i("see-dialog", "onStart");
         dialog_view.startAnimation(mDialogInAnim);
-
+//        if (mDialogStyle == D_PROGRESS_WHEEL_TYPE) {
+//            startProgressColorTimer();
+//        }
     }
+
 
     @Override
     public void cancel() {
+        if (mYouSeeDialogListener != null) {
+            mYouSeeDialogListener.onCancelClick(YouSeeDialog.this);
+        }
         //动画完成的回调中super
         outAnimationStart(true);
     }
@@ -154,6 +166,28 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
         outAnimationStart(false);
     }
 
+    /**
+     * ProgressBar型dialog时，效果色值设置
+     *
+     * @param colourValue 如#F79347
+     */
+    public YouSeeDialog setProgressDialogColor(String colourValue) {
+        mProgressCircleColor = colourValue;
+        if (circular_progress != null) {
+            if (!TextUtils.isEmpty(mProgressCircleColor) && colourValue.startsWith("#")) {
+                int color = Color.parseColor(mProgressCircleColor);
+                circular_progress.setBackgroundColor(color);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * 按钮型dialog时，效果颜色设置
+     *
+     * @param colorMatchType C_MATCHING_WARN_TYPE/C_MATCHING_WARN_TYPE/C_MATCHING_SIMPLE_TYPE 或色值如#F79347
+     * @return
+     */
     public YouSeeDialog setBtnDialogColor(String colorMatchType) {
         if (!TextUtils.isEmpty(colorMatchType)) {
             mColorMatchType = colorMatchType;
@@ -164,6 +198,9 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
                 } else if (mColorMatchType.equals(C_MATCHING_ERROR_TYPE)) {
                     dialog_content_ll.setBackgroundResource(R.drawable.dialog_bg_error);
                     confirm_btn.setBackgroundResource(R.drawable.btn_bg_error_ys_d);
+                } else if (mColorMatchType.equals(C_MATCHING_SIMPLE_TYPE)) {
+                    dialog_content_ll.setBackgroundResource(R.drawable.dialog_bg_simple);
+                    confirm_btn.setBackgroundResource(R.drawable.btn_bg_simple_ys_d);
                 } else {
                     LayerDrawable layerDrawableDialog = diyColorMatchDialog(mColorMatchType);
                     StateListDrawable stateListDrawable = diyColorMatchBtn(mColorMatchType);
@@ -179,15 +216,70 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
         return this;
     }
 
+//    private void startProgressColorTimer() {
+//        if (timer != null) {
+//            timer.cancel();
+//            timer = null;
+//        }
+//
+//        if (timerTask != null) {
+//            timerTask.cancel();
+//            timerTask = null;
+//        }
+//
+//        timer = new Timer();
+//        timerTask = new TimerTask() {
+//            @Override
+//            public void run() {
+//                if (changeCount >= CHANGE_COUNT_MAX) {
+//                    changeCount = CHANGE_COUNT_MIN;
+//                }
+//                Message msg = new Message();
+//                msg.arg1 = changeCount;
+//                timerHandler.sendMessage(msg);
+//                changeCount++;
+//            }
+//        };
+//
+//        timer.schedule(timerTask, 0, 1000);
+//    }
+
+
+//    private final Handler timerHandler = new Handler() {
+//
+//        @Override
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            switch (msg.arg1) {
+//                case 1:
+//                    circular_progress.setBackgroundResource(R.color.progress_01_ys_d);
+//                    break;
+//                case 2:
+//                    circular_progress.setBackgroundResource(R.color.progress_02_ys_d);
+//                    break;
+//                case 3:
+//                    circular_progress.setBackgroundResource(R.color.progress_03_ys_d);
+//                    break;
+//                case 4:
+//                    circular_progress.setBackgroundResource(R.color.progress_04_ys_d);
+//                    break;
+//                case 5:
+//                    circular_progress.setBackgroundResource(R.color.progress_05_ys_d);
+//                    break;
+//            }
+//        }
+//    };
+
+
     /**
      * @param colourValue 色值，如#F79347
      */
     private LayerDrawable diyColorMatchDialog(String colourValue) {
-        if (!TextUtils.isEmpty(mColorMatchType) && mColorMatchType.startsWith("#")) {
+        if (!TextUtils.isEmpty(colourValue) && colourValue.startsWith("#")) {
             int contentColor = Color.parseColor("#FFFFFF");
             int baseColor = Color.parseColor(colourValue);
 
-            int radius0 = 7;
+            float radius0 = 15f;
             float[] outerR = new float[]{radius0, radius0, radius0, radius0, radius0, radius0, radius0, radius0};
             RoundRectShape roundRectShape0 = new RoundRectShape(outerR, null, null);
             ShapeDrawable shapeDrawableBg = new ShapeDrawable();
@@ -196,7 +288,7 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
             shapeDrawableBg.getPaint().setStyle(Paint.Style.FILL);
             shapeDrawableBg.getPaint().setColor(baseColor);
 
-            int radius1 = 7;
+            float radius1 = 15f;
             float[] outerR1 = new float[]{radius1, radius1, radius1, radius1, radius1, radius1, radius1, radius1};
             RoundRectShape roundRectShape1 = new RoundRectShape(outerR1, null, null);
             ShapeDrawable shapeDrawableFg = new ShapeDrawable();
@@ -215,10 +307,10 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
     }
 
     /**
-     * @param colourValue 色值，如#F79347
+     * @param colourValue 按钮型dialog时，效果色值设置，如#F79347
      */
     private StateListDrawable diyColorMatchBtn(String colourValue) {
-        if (!TextUtils.isEmpty(mColorMatchType) && mColorMatchType.startsWith("#")) {
+        if (!TextUtils.isEmpty(colourValue) && colourValue.startsWith("#")) {
             int baseColor = Color.parseColor(colourValue);
             int redBase = Color.red(baseColor);
             int greenBase = Color.green(baseColor);
@@ -239,7 +331,7 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
             int deepColor = Color.rgb(redDeep, greenDeep, blueDeep);
             Log.i("see-dialog", "redDeep=" + redDeep + ";greenDeep=" + greenDeep + ";blueDeep=" + blueDeep);
 
-            int radius0 = 5;
+            float radius0 = 10f;
             float[] outerR = new float[]{radius0, radius0, radius0, radius0, radius0, radius0, radius0, radius0};
             RoundRectShape roundRectShape0 = new RoundRectShape(outerR, null, null);
             ShapeDrawable shapeDrawableNormal = new ShapeDrawable();
@@ -248,7 +340,7 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
             shapeDrawableNormal.getPaint().setStyle(Paint.Style.FILL);
             shapeDrawableNormal.getPaint().setColor(baseColor);
 
-            int radius1 = 5;
+            float radius1 = 10f;
             float[] outerR1 = new float[]{radius1, radius1, radius1, radius1, radius1, radius1, radius1, radius1};
             RoundRectShape roundRectShape1 = new RoundRectShape(outerR1, null, null);
             ShapeDrawable shapeDrawablePressed = new ShapeDrawable();
@@ -392,21 +484,14 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.cancel_btn) {
-            if (mYouSeeDialogListener != null) {
-                mYouSeeDialogListener.onCancelClick(YouSeeDialog.this);
-            } else {
-                dismiss();
-            }
-
-
+            cancel();
         }
 
         if (v.getId() == R.id.confirm_btn) {
             if (mYouSeeDialogListener != null) {
                 mYouSeeDialogListener.onConfirmClick(YouSeeDialog.this);
-            } else {
-                dismiss();
             }
+            dismiss();
         }
 
     }
@@ -421,4 +506,17 @@ public class YouSeeDialog extends Dialog implements View.OnClickListener {
         }
     }
 
+//    @Override
+//    public void onDetachedFromWindow() {
+//        super.onDetachedFromWindow();
+//        if (timerTask != null) {
+//            timerTask.cancel();
+//            timerTask = null;
+//        }
+//
+//        if (timer != null) {
+//            timer.cancel();
+//            timer = null;
+//        }
+//    }
 }

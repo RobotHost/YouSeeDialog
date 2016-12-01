@@ -14,8 +14,12 @@
     <color name="cancel_btn_pre_ys_d">#404040</color>
     <color name="simple_btn_nor_ys_d">#5BD8D8</color>
     <color name="simple_btn_pre_ys_d">#33CFCF</color>
+    <color name="text_title_ys_d">#575757</color>
+    <color name="text_content_ys_d">#797979</color>
 
-
-    <color name="text_color_title_ys_d">#575757</color>
-    <color name="text_color_content_ys_d">#797979</color>
+<!--    <color name="progress_01_ys_d">#5BD8D8</color>
+    <color name="progress_02_ys_d">#F28B8E</color>
+    <color name="progress_03_ys_d">#398BEB</color>
+    <color name="progress_04_ys_d">#FAB321</color>
+    <color name="progress_05_ys_d">#11C434</color>-->
 </resources>
